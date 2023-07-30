@@ -4,10 +4,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/UmetsuJunya/go-todo-backend/article"
-	"github.com/UmetsuJunya/go-todo-backend/handler"
-	"github.com/UmetsuJunya/go-todo-backend/lib"
-	"github.com/UmetsuJunya/go-todo-backend/user"
+	"github.com/UmetsuJunya/todo-app-backend/backend/article"
+	"github.com/UmetsuJunya/todo-app-backend/backend/handler"
+	"github.com/UmetsuJunya/todo-app-backend/backend/lib"
+	"github.com/UmetsuJunya/todo-app-backend/backend/user"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 

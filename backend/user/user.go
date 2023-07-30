@@ -3,7 +3,7 @@ package user
 import (
 	"fmt"
 
-	"github.com/UmetsuJunya/go-todo-backend/lib"
+	"github.com/UmetsuJunya/todo-app-backend/backend/lib"
 )
 
 type User struct {

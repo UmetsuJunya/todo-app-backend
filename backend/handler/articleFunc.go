@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/UmetsuJunya/go-todo-backend/article"
+	"github.com/UmetsuJunya/todo-app-backend/backend/article"
 
 	"github.com/gin-gonic/gin"
 )

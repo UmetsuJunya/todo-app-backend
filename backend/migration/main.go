@@ -11,6 +11,7 @@ import (
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/mysql"
 	_ "github.com/golang-migrate/migrate/source/file"
+
 	"github.com/joho/godotenv"
 	"github.com/pkg/errors"
 )
