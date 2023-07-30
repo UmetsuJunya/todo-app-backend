@@ -1,0 +1,9 @@
+FROM golang:1.20-alpine
+COPY . /go/src/sample
+WORKDIR /go/src/sample
+COPY go.mod go.sum ./
+RUN go mod download
+# 必要なパッケージのインストール
+RUN apk update &&  apk add git
+RUN go install github.com/cosmtrek/air@latest
+CMD ["air", "-c", ".air.toml"]**
