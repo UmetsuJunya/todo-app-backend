@@ -16,5 +16,6 @@ go run main.go up
 
 docker exec -it todo-backend-docker-mysql-1 sh<br>
 mysql -u root -p<br>
+show databases;<br>
 use backend;<br>
 show tables;

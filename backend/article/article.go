@@ -3,7 +3,7 @@ package article
 import (
 	"fmt"
 
-	"../lib"
+	"github.com/UmetsuJunya/todo-app-backend/backend/lib"
 )
 
 type Article struct {
