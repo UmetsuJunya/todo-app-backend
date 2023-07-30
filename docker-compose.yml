@@ -28,9 +28,9 @@ services:
     ports:
       - 13306:3306
     volumes:
-      - mysql_volume:/var/lib/mysql
-      # ローカルフォルダに保存したい場合
-      # - ./data:/var/lib/mysql
-
-volumes:
-  mysql_volume:
+      # docker volumeに保存する場合
+      # - mysql_volume:/var/lib/mysql
+      # ローカルフォルダに保存する場合
+      - ./data:/var/lib/mysql
+# volumes:
+#   mysql_volume:

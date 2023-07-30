@@ -3,6 +3,7 @@ package lib
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"gorm.io/gorm"
@@ -20,7 +21,11 @@ var dbConn *SQLHandler
 
 // DBOpen は DB connectionを張る。
 func DBOpen() {
-	dbConn = NewSQLHandler()
+	dbRetryAttempts, err := strconv.ParseUint(os.Getenv("DB_RETRY_ATTEMPTS"), 10, 64)
+	if err != nil {
+		panic(err)
+	}
+	dbConn = NewSQLHandler(uint(dbRetryAttempts))
 }
 
 // DBClose は DB connectionを張る。
@@ -30,7 +35,8 @@ func DBClose() {
 }
 
 // NewSQLHandler ...
-func NewSQLHandler() *SQLHandler {
+// count: 接続試行回数
+func NewSQLHandler(count uint) *SQLHandler {
 	user := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 	host := os.Getenv("DB_HOST")
@@ -42,16 +48,29 @@ func NewSQLHandler() *SQLHandler {
 	var err error
 	// Todo: USE_HEROKU = 1のときと場合分け
 	if os.Getenv("USE_HEROKU") != "1" {
-		// docker volumeに保存する場合
-		// dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
-		// ホストのファイルに保存する場合
-		// docker-compose.yml のvolumeの値を変更する
-		dsn := user + ":" + password + "@tcp(goDockerDB)/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
+		dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
+		// メモ：docker container名で宛先を指定する場合（どちらでも良い
+		// dsn := user + ":" + password + "@tcp(goDockerDB)/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
 
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-		if err != nil {
-			panic(err)
+		for count >= 1 {
+			db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+			if err != nil {
+				time.Sleep(time.Second * 2)
+				if count == 1 {
+					panic(err)
+				}
+				count--
+				fmt.Printf("retry... count:%v\n", count)
+				continue
+			}
+			break
 		}
+
+		// db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		// if err != nil {
+		// 	panic(err)
+		// }
+
 	} /*else {
 	    var (
 	        instanceConnectionName = os.Getenv("DB_CONNECTION_NAME") // e.g. 'project:region:instance'
