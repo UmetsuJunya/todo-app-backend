@@ -42,7 +42,12 @@ func NewSQLHandler() *SQLHandler {
 	var err error
 	// Todo: USE_HEROKU = 1のときと場合分け
 	if os.Getenv("USE_HEROKU") != "1" {
-		dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
+		// docker volumeに保存する場合
+		// dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
+		// ホストのファイルに保存する場合
+		// docker-compose.yml のvolumeの値を変更する
+		dsn := user + ":" + password + "@tcp(goDockerDB)/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
+
 		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		if err != nil {
 			panic(err)

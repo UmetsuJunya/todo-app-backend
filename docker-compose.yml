@@ -4,6 +4,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.local
+    container_name: goDockerAPI
     volumes:
       - ./backend:/go/src/backend
     working_dir: /go/src/backend
@@ -19,6 +20,7 @@ services:
 
   mysql:
     build: ./mysql
+    container_name: goDockerDB
     environment:
       TZ: Asia/Tokyo
       MYSQL_ROOT_PASSWORD: root
@@ -27,6 +29,8 @@ services:
       - 13306:3306
     volumes:
       - mysql_volume:/var/lib/mysql
+      # ローカルフォルダに保存したい場合
+      # - ./data:/var/lib/mysql
 
 volumes:
   mysql_volume:
