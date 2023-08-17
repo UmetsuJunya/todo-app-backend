@@ -4,10 +4,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/UmetsuJunya/todo-app-backend/backend/article"
 	"github.com/UmetsuJunya/todo-app-backend/backend/handler"
 	"github.com/UmetsuJunya/todo-app-backend/backend/lib"
-	"github.com/UmetsuJunya/todo-app-backend/backend/user"
+	"github.com/UmetsuJunya/todo-app-backend/backend/todo"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -22,8 +21,8 @@ func main() {
 		}
 	}
 
-	article := article.New()
-	user := user.New()
+	todo := todo.New()
+	// user := user.New()
 
 	lib.DBOpen()
 	defer lib.DBClose()
@@ -51,9 +50,12 @@ func main() {
 		MaxAge:           24 * time.Hour,
 	}))
 
-	r.GET("/article", handler.ArticlesGet(article))
-	r.POST("/article", handler.ArticlePost(article))
-	r.POST("/user/login", handler.UserPost(user))
+	r.GET("/todo", handler.TodosGet(todo))
+	r.POST("/todo", handler.TodoPost(todo))
+	r.PUT("/todo/update/:id", handler.TodoPut(todo))
+	r.PUT("/todo/switch/:id", handler.TodoComplete(todo))
+	r.DELETE("/todo/delete/:id", handler.TodoDelete(todo))
+	// r.POST("/user/login", handler.UserPost(user))
 
 	r.Run(os.Getenv("HTTP_HOST") + ":" + os.Getenv("HTTP_PORT")) // listen and serve on 0.0.0.0:8080
 }
