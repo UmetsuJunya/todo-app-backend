@@ -8,13 +8,13 @@ docker-compose up --build
 
 ## make migrations
 
-docker exec -it todo-backend-docker-go-1 sh<br>
+docker exec -it goDockerAPI sh<br>
 cd migration<br>
 go run main.go up
 
 ## Confirm DB table
 
-docker exec -it todo-backend-docker-mysql-1 sh<br>
+docker exec -it goDockerDB sh<br>
 mysql -u root -p<br>
 show databases;<br>
 use backend;<br>
